@@ -3,12 +3,14 @@ import bcrypt from "bcrypt";
 import logger from "../modules/logger.js";
 import jwt from "jsonwebtoken";
 import authorization from "../modules/authorization.js";
-import { STATUS } from "../models/status.js";
 import Admins from "../db/schema/adminSchema.js";
+import sanitize from "mongo-sanitize";
+import { STATUS } from "../models/status.js";
+
 
 export const login = async (req, res, db) => {
   const User = Users(db);
-  const { email, password } = req.body;
+  const { email, password } = sanitize(req.body);
 
   try {
     const userIndb = await User.findOne({ email: email });
@@ -57,7 +59,7 @@ export const login = async (req, res, db) => {
 
 export const adminLogin = async (req, res, db) => {
   const Admin = Admins(db);
-  const { email, password } = req.body;
+  const { email, password } = sanitize(req.body);
 
   try {
     const adminIndb = await Admin.findOne({ email: email });

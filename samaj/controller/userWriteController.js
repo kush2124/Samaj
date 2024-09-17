@@ -1,12 +1,13 @@
 import Users from "../db/schema/userSchema.js";
 import logger from "../modules/logger.js";
+import sanitize from "mongo-sanitize";
 import { ADMIN_ACTIONS } from "../models/adminActions.js";
 import { USER_STATUS } from "../models/userStatus.js";
 
 export const updateUser = async (req, res, db) => {
   const User = Users(db);
-  const email = req.user.email;
-  const updatedFields = { ...req.body };
+  const email = sanitize(req.user.email);
+  const updatedFields = { ...sanitize(req.body) };
 
   try {
     const userIndb = await User.findOneAndUpdate(
@@ -35,7 +36,7 @@ export const updateUser = async (req, res, db) => {
 export const saveUser = async (req, res, db) => {
   const User = Users(db);
   const email = req.user.email;
-  const updatedFields = { ...req.body, status: "PENDING" };
+  const updatedFields = sanitize({ ...req.body, status: "PENDING" });
 
   try {
     const userIndb = await User.findOneAndUpdate(
@@ -63,9 +64,9 @@ export const saveUser = async (req, res, db) => {
 
 export const takeActionOnUser = async (req, res, db) => {
   const User = Users(db);
-  const userEmail = req.params.userId;
-  const adminEmail = req.user.email;
-  const action = req.params.action;
+  const userEmail = sanitize(req.params.userId);
+  const adminEmail = sanitize(req.user.email);
+  const action = sanitize(req.params.action);
 
   const actionToStatus = convertActionToStatus(action);
   try {

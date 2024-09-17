@@ -11,7 +11,12 @@ const querySchema = z.object({
 });
 
 const statusSchema = z.object({
-  status: z.enum([USER_STATUS.APPROVED, USER_STATUS.DRAFT, USER_STATUS.PENDING, USER_STATUS.REJECTED]),
+  status: z.enum([
+    USER_STATUS.APPROVED,
+    USER_STATUS.DRAFT,
+    USER_STATUS.PENDING,
+    USER_STATUS.REJECTED,
+  ]),
 });
 
 const listUserParse = (req, res, next) => {

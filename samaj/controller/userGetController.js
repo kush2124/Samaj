@@ -1,9 +1,10 @@
 import Users from "../db/schema/userSchema.js";
 import logger from "../modules/logger.js";
+import sanitize from "mongo-sanitize";
 
 const getUser = async (req, res, db) => {
   const User = Users(db);
-  const user = req.user;
+  const user = sanitize(req.user);
   try {
     const userIndb = await User.findOne({ email: user.email }, "-password");
     if (!userIndb) {

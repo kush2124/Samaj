@@ -1,13 +1,14 @@
 import Users from "../db/schema/userSchema.js";
 import logger from "../modules/logger.js";
+import sanitize from "mongo-sanitize";
 
 export const searchUsersWithStatus = async (req, res, db) => {
   try {
     const User = Users(db);
 
-    const status = req.params.status;
-    const limit = req.query.limit;
-    const nextToken = req.query.nextToken;
+    const status = sanitize(req.params.status);
+    const limit = sanitize(req.query.limit);
+    const nextToken = sanitize(req.query.nextToken);
 
     const MAX_RESULTS_TO_FETCH = limit <= 25 ? limit : 25;
 

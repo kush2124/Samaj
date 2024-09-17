@@ -2,15 +2,15 @@ import Users from "../db/schema/userSchema.js";
 import bcrypt from "bcrypt";
 import logger from "../modules/logger.js";
 import Admins from "../db/schema/adminSchema.js";
-import { STATUS } from "../models/status.js";
 import Invite from "../db/schema/inviteSchema.js";
+import sanitize from "mongo-sanitize";
+import { STATUS } from "../models/status.js";
 import { CODE_STATUS } from "../models/codeStatus.js";
 
-const INVITE_CODE = "QWERTYUIOP";
 
 export const signup = async (req, res, db) => {
   const User = Users(db);
-  const { email, password } = req.body;
+  const { email, password } = sanitize(req.body);
 
   try {
     const userIndb = await User.findOne({ email: email });
@@ -48,12 +48,12 @@ export const signup = async (req, res, db) => {
 export const adminSignup = async (req, res, db) => {
   const Admin = Admins(db);
   const InviteCode = Invite(db);
-  const { email, password, inviteCode, name } = req.body;
+  const { email, password, inviteCode, name } = sanitize(req.body);
 
   try {
     const adminIndb = await Admin.findOne({ email: email });
 
-    const inviteCodeInDb = InviteCode.findOne({code : inviteCode });
+    const inviteCodeInDb = InviteCode.findOne({ code: sanitize(inviteCode) });
     if (!inviteCodeInDb && inviteCodeInDb.status === CODE_STATUS.USED) {
       return res.status(400).json({
         email: email,
@@ -79,8 +79,8 @@ export const adminSignup = async (req, res, db) => {
     });
 
     await InviteCode.findoneAndUpdate(
-        { code : inviteCode },
-        { $set : { status: CODE_STATUS.USED } }
+      { code: inviteCode },
+      { $set: { status: CODE_STATUS.USED } },
     );
 
     res.status(201).json({
