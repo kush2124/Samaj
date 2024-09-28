@@ -16,7 +16,7 @@ const getUser = async (req, res, db) => {
     } else {
       res.status(200).json({
         user: userIndb,
-        msg: "User fetched successfully"
+        msg: "User fetched successfully",
       });
     }
   } catch (ex) {

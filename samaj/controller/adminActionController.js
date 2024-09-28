@@ -25,7 +25,7 @@ export const takeActionOnUser = async (req, res, db) => {
     }
     res.status(200).json({
       user: userIndb,
-      msg: "Operation completed successfully"
+      msg: "Operation completed successfully",
     });
   } catch (ex) {
     logger.error(ex.message, { exception: ex });

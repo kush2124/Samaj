@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import authorization from "../modules/authorization.js";
 import Admins from "../db/schema/adminSchema.js";
 import sanitize from "mongo-sanitize";
-import { STATUS } from "../models/status.js";
 
 export const login = async (req, res, db) => {
   const User = Users(db);
@@ -34,7 +33,7 @@ export const login = async (req, res, db) => {
       res.status(200).json({
         email: email,
         token: token,
-        msg: "Login successful"
+        msg: "Login successful",
       });
     } else {
       logger.debug("login: Invalid username or password");
@@ -80,7 +79,7 @@ export const adminLogin = async (req, res, db) => {
       res.status(200).json({
         email: email,
         token: token,
-        msg: "Login successful"
+        msg: "Login successful",
       });
     } else {
       logger.debug("login: Invalid username or password");

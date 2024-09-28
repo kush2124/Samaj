@@ -18,7 +18,7 @@ export const signup = async (req, res, db) => {
       logger.debug("signup: User found in db");
       return res.status(409).json({
         email: email,
-        msg: "User already exists"
+        msg: "User already exists",
       });
     }
 
@@ -33,14 +33,14 @@ export const signup = async (req, res, db) => {
 
     res.status(201).json({
       email: email,
-      msg: "User successfully created"
+      msg: "User successfully created",
     });
   } catch (ex) {
     logger.error(ex.message, { exception: ex });
 
     res.status(500).json({
       email: email,
-      msg: "Intrenal failure"
+      msg: "Intrenal failure",
     });
   }
 };
@@ -53,11 +53,13 @@ export const adminSignup = async (req, res, db) => {
   try {
     const adminIndb = await Admin.findOne({ email: email });
 
-    const inviteCodeInDb = await InviteCode.findOne({ code: sanitize(inviteCode) });
+    const inviteCodeInDb = await InviteCode.findOne({
+      code: sanitize(inviteCode),
+    });
     if (!inviteCodeInDb || inviteCodeInDb.status === CODE_STATUS.USED) {
       return res.status(400).json({
         email: email,
-        msg: "Invite code does not exists or already in use"
+        msg: "Invite code does not exists or already in use",
       });
     }
 
@@ -65,7 +67,7 @@ export const adminSignup = async (req, res, db) => {
       logger.debug("signup: Admin found in db");
       return res.status(409).json({
         email: email,
-        msg: "Admin exists in the system"
+        msg: "Admin exists in the system",
       });
     }
 
@@ -85,9 +87,8 @@ export const adminSignup = async (req, res, db) => {
 
     res.status(201).json({
       email: email,
-      msg: "Admin successfully created"
+      msg: "Admin successfully created",
     });
-
   } catch (ex) {
     logger.error(ex.message, { exception: ex });
 
@@ -95,7 +96,7 @@ export const adminSignup = async (req, res, db) => {
 
     res.status(500).json({
       email: email,
-      msg: "Internal failure"
+      msg: "Internal failure",
     });
   }
 };
