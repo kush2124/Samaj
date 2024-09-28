@@ -7,7 +7,6 @@ import sanitize from "mongo-sanitize";
 import { STATUS } from "../models/status.js";
 import { CODE_STATUS } from "../models/codeStatus.js";
 
-
 export const signup = async (req, res, db) => {
   const User = Users(db);
   const { email, password } = sanitize(req.body);

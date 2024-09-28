@@ -7,7 +7,6 @@ import Admins from "../db/schema/adminSchema.js";
 import sanitize from "mongo-sanitize";
 import { STATUS } from "../models/status.js";
 
-
 export const login = async (req, res, db) => {
   const User = Users(db);
   const { email, password } = sanitize(req.body);

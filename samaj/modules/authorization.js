@@ -1,8 +1,10 @@
 import jwt from "jsonwebtoken";
+import { getSecret } from "./awsModule.js";
 
-// Move to secrets manager
-const JWT_SECRET = "nanu_manu_jhunu";
-const ADMIN_JWT_SECRET = "BOSS";
+const secret = await getSecret("samaj/tokens");
+
+const JWT_SECRET = secret.janta;
+const ADMIN_JWT_SECRET = secret.sarkar;
 
 const authorize = (req, res, next) => {
   authorizer(req, res, next, JWT_SECRET);

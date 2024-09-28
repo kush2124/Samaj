@@ -1,12 +1,14 @@
 import express from "express";
+import helmet from "helmet";
 import connectMongo from "./modules/dbConnection.js";
 import userRouter from "./routes/userRoutes.js";
 import logger from "./modules/logger.js";
+import { config } from '@dotenvx/dotenvx';
 import adminRouter from "./routes/adminRoutes.js";
-import helmet from "helmet";
 
+config();
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ?? 3000;
 const mongo = await connectMongo("Samaj");
 
 app.use(helmet());
