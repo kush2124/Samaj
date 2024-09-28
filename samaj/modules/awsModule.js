@@ -2,14 +2,14 @@ import {
   SecretsManagerClient,
   GetSecretValueCommand,
 } from "@aws-sdk/client-secrets-manager";
-import { config } from '@dotenvx/dotenvx';
+import { config } from "@dotenvx/dotenvx";
 
 config();
 const client = new SecretsManagerClient({
   region: "ap-south-1",
   credentials: {
     accessKeyId: process.env.ACCESS_KEY_ID,
-    secretAccessKey: process.env.SECRET_ACCESS_KEY
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
   },
 });
 

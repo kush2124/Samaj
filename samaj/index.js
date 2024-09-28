@@ -3,7 +3,7 @@ import helmet from "helmet";
 import connectMongo from "./modules/dbConnection.js";
 import userRouter from "./routes/userRoutes.js";
 import logger from "./modules/logger.js";
-import { config } from '@dotenvx/dotenvx';
+import { config } from "@dotenvx/dotenvx";
 import adminRouter from "./routes/adminRoutes.js";
 
 config();

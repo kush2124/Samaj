@@ -10,14 +10,14 @@ export const searchUsersWithStatus = async (req, res, db) => {
     const limit = sanitize(req.query.limit);
     const nextToken = sanitize(req.query.nextToken);
 
-    const MAX_RESULTS_TO_FETCH = limit <= 25 ? limit : 25;
+    const MAX_RESULTS_TO_FETCH = limit < 25 ? limit : 25;
 
     const query = {
       status,
       ...(nextToken && { _id: { $gt: nextToken } }),
     };
 
-    console.log(query);
+    logger.info(`Query is ${query}`);
     const users = await User.find(query)
       .select("-password")
       .sort("_id")
@@ -33,7 +33,7 @@ export const searchUsersWithStatus = async (req, res, db) => {
   } catch (ex) {
     logger.error("Internal failure", ex);
     res.status(500).json({
-      message: "Internal failure",
+      msg: "Internal failure",
     });
   }
 };

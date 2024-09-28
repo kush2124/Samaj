@@ -5,10 +5,14 @@ import getUser from "../controller/userGetController.js";
 import loginParse from "../models/login.js";
 import signupParse from "../models/signup.js";
 import updateUserParse from "../models/updateUser.js";
-import saveUserParse from "../models/saveUser.js";
+import submitUserParse from "../models/submitUser.js";
 import { login } from "../controller/loginController.js";
 import { signup } from "../controller/signupController.js";
-import { saveUser, updateUser } from "../controller/userWriteController.js";
+import {
+  editUser,
+  submitUser,
+  updateUser,
+} from "../controller/userWriteController.js";
 
 const router = express.Router();
 
@@ -28,7 +32,7 @@ const userRouter = (db) => {
   });
 
   router.post(
-    "/user/details",
+    "/user/action/update",
     authorization.authorize,
     updateUserParse,
     (req, res) => {
@@ -36,12 +40,16 @@ const userRouter = (db) => {
     },
   );
 
+  router.post("/user/action/edit", authorization.authorize, (req, res) => {
+    editUser(req, res, db);
+  });
+
   router.post(
-    "/user/submit",
+    "/user/action/submit",
     authorization.authorize,
-    saveUserParse,
+    submitUserParse,
     (req, res) => {
-      saveUser(req, res, db);
+      submitUser(req, res, db);
     },
   );
 

@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     enum: ["DRAFT", "PENDING", "APPROVED", "REJECTED"],
     default: "DRAFT",
   },
-  actionBy: {
+  approvedBy: {
     type: String,
     match: [/^\S+@\S+\.\S+$/, "Please provide a valid email address"],
   },

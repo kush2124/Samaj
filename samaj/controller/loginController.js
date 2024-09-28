@@ -18,8 +18,7 @@ export const login = async (req, res, db) => {
       logger.debug("login: User not found in db");
       return res.status(400).json({
         email: email,
-        status: STATUS.FAILED,
-        message: "User not found",
+        msg: "User not found",
       });
     }
 
@@ -34,15 +33,14 @@ export const login = async (req, res, db) => {
       });
       res.status(200).json({
         email: email,
-        status: STATUS.SUCCESSFUL,
         token: token,
+        msg: "Login successful"
       });
     } else {
       logger.debug("login: Invalid username or password");
       res.status(400).json({
         email: email,
-        status: STATUS.FAILED,
-        message: "Invalid username or password",
+        msg: "Invalid username or password",
       });
     }
   } catch (ex) {
@@ -50,8 +48,7 @@ export const login = async (req, res, db) => {
 
     res.status(500).json({
       email: email,
-      status: STATUS.FAILED,
-      message: "Internal server error",
+      msg: "Internal server error",
     });
   }
 };
@@ -67,7 +64,6 @@ export const adminLogin = async (req, res, db) => {
       logger.debug("login: Admin not found in db");
       return res.status(400).json({
         email: email,
-        status: STATUS.FAILED,
         message: "Admin not found",
       });
     }
@@ -83,15 +79,14 @@ export const adminLogin = async (req, res, db) => {
       });
       res.status(200).json({
         email: email,
-        status: STATUS.SUCCESSFUL,
         token: token,
+        msg: "Login successful"
       });
     } else {
       logger.debug("login: Invalid username or password");
       res.status(400).json({
         email: email,
-        status: STATUS.FAILED,
-        message: "Invalid username or password",
+        msg: "Invalid username or password",
       });
     }
   } catch (ex) {
@@ -99,8 +94,7 @@ export const adminLogin = async (req, res, db) => {
 
     res.status(500).json({
       email: email,
-      status: STATUS.FAILED,
-      message: "Internal server error",
+      msg: "Internal server error",
     });
   }
 };

@@ -1,13 +1,34 @@
 import Users from "../db/schema/userSchema.js";
 import logger from "../modules/logger.js";
 import sanitize from "mongo-sanitize";
-import { ADMIN_ACTIONS } from "../models/adminActions.js";
 import { USER_STATUS } from "../models/userStatus.js";
+import { getUserState } from "./userGetController.js";
 
 export const updateUser = async (req, res, db) => {
   const User = Users(db);
   const email = sanitize(req.user.email);
-  const updatedFields = { ...sanitize(req.body) };
+  const updatedFields = { ...sanitize(req.body), status: USER_STATUS.DRAFT };
+
+  try {
+    const status = await getUserState(email, User);
+    if (status === USER_STATUS.UNKNOWN) {
+      res.status(400).json({
+        msg: "User not found",
+      });
+    } else if (
+      status === USER_STATUS.PENDING ||
+      status === USER_STATUS.APPROVED
+    ) {
+      res.status(400).json({
+        msg: "User cannot be updated",
+      });
+    }
+  } catch (ex) {
+    logger.error(ex.message, { exception: ex });
+    res.status(500).json({
+      msg: "Internal failure",
+    });
+  }
 
   try {
     const userIndb = await User.findOneAndUpdate(
@@ -18,7 +39,7 @@ export const updateUser = async (req, res, db) => {
 
     if (!userIndb) {
       res.status(400).json({
-        message: "User not found",
+        msg: "User not found",
       });
     }
     res.status(200).json({
@@ -28,15 +49,36 @@ export const updateUser = async (req, res, db) => {
     logger.error(ex.message, { exception: ex });
 
     res.status(500).json({
-      message: "Internal failure",
+      msg: "Internal failure",
     });
   }
 };
 
-export const saveUser = async (req, res, db) => {
+export const submitUser = async (req, res, db) => {
   const User = Users(db);
   const email = req.user.email;
-  const updatedFields = sanitize({ ...req.body, status: "PENDING" });
+  const updatedFields = sanitize({ ...req.body, status: USER_STATUS.PENDING });
+
+  try {
+    const status = await getUserState(email, User);
+    if (status === USER_STATUS.UNKNOWN) {
+      res.status(400).json({
+        msg: "User not found",
+      });
+    } else if (
+      status === USER_STATUS.PENDING ||
+      status === USER_STATUS.APPROVED
+    ) {
+      res.status(400).json({
+        msg: "User cannot be submiitted",
+      });
+    }
+  } catch (ex) {
+    logger.error(ex.message, { exception: ex });
+    res.status(500).json({
+      msg: "Internal failure",
+    });
+  }
 
   try {
     const userIndb = await User.findOneAndUpdate(
@@ -47,7 +89,7 @@ export const saveUser = async (req, res, db) => {
 
     if (!userIndb) {
       res.status(400).json({
-        message: "User not found",
+        msg: "User not found",
       });
     }
     res.status(200).json({
@@ -57,28 +99,44 @@ export const saveUser = async (req, res, db) => {
     logger.error(ex.message, { exception: ex });
 
     res.status(500).json({
-      message: "Internal failure",
+      msg: "Internal failure",
     });
   }
 };
 
-export const takeActionOnUser = async (req, res, db) => {
+export const editUser = async (req, res, db) => {
   const User = Users(db);
-  const userEmail = sanitize(req.params.userId);
-  const adminEmail = sanitize(req.user.email);
-  const action = sanitize(req.params.action);
+  const email = req.user.email;
+  const updatedFields = sanitize({ status: USER_STATUS.DRAFT });
 
-  const actionToStatus = convertActionToStatus(action);
+  try {
+    const status = await getUserState(email, User);
+    if (status === USER_STATUS.UNKNOWN) {
+      res.status(400).json({
+        msg: "User not found",
+      });
+    } else if (status === USER_STATUS.DRAFT) {
+      res.status(400).json({
+        msg: "User is already in editable state",
+      });
+    }
+  } catch (ex) {
+    logger.error(ex.message, { exception: ex });
+    res.status(500).json({
+      msg: "Internal failure",
+    });
+  }
+
   try {
     const userIndb = await User.findOneAndUpdate(
-      { email: userEmail },
-      { $set: { status: actionToStatus, actionBy: adminEmail } },
+      { email: email },
+      { $set: updatedFields },
       { new: true, fields: { password: 0 } },
     );
 
     if (!userIndb) {
       res.status(400).json({
-        message: "User not found",
+        msg: "User not found",
       });
     }
     res.status(200).json({
@@ -88,18 +146,7 @@ export const takeActionOnUser = async (req, res, db) => {
     logger.error(ex.message, { exception: ex });
 
     res.status(500).json({
-      message: "Internal failure",
+      msg: "Internal failure",
     });
-  }
-};
-
-const convertActionToStatus = (action) => {
-  switch (action) {
-    case ADMIN_ACTIONS.APPROVE:
-      return USER_STATUS.APPROVED;
-    case ADMIN_ACTIONS.REJECT:
-      return USER_STATUS.REJECTED;
-    default:
-      throw new Error("Invalid action performed");
   }
 };

@@ -4,11 +4,11 @@ import loginParse from "../models/login.js";
 import adminSignupParse from "../models/adminSignup.js";
 import listUserParse from "../models/listUsers.js";
 import authorization from "../modules/authorization.js";
+import actionParse from "../models/markUser.js";
 import { adminLogin } from "../controller/loginController.js";
 import { adminSignup } from "../controller/signupController.js";
 import { searchUsersWithStatus } from "../controller/userSearchController.js";
-import { takeActionOnUser } from "../controller/userWriteController.js";
-import actionParse from "../models/markUser.js";
+import { takeActionOnUser } from "../controller/adminActionController.js";
 
 const router = express.Router();
 

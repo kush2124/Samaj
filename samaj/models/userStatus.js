@@ -3,4 +3,5 @@ export const USER_STATUS = Object.freeze({
   REJECTED: "REJECTED",
   DRAFT: "DRAFT",
   PENDING: "PENDING",
+  UNKNOWN: "UNKNOWN ",
 });

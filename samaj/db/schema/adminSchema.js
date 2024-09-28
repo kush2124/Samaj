@@ -19,7 +19,7 @@ const adminSchema = new mongoose.Schema({
 });
 
 const Admins = (db) => {
-  return db.model("users", adminSchema);
+  return db.model("admins", adminSchema);
 };
 
 export default Admins;
