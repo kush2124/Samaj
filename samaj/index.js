@@ -13,10 +13,13 @@ const mongo = await connectMongo("Samaj");
 
 app.use(helmet());
 app.use(express.json());
-app.use(userRouter(mongo));
-app.use(adminRouter(mongo));
+app.use("/user", userRouter(mongo));
+app.use("/admin", adminRouter(mongo));
 app.use((err, res) => {
   logger.error(err);
+  return res.status(500).json({
+    msg: "Internal failure"
+  });
 });
 
 app.listen(PORT, () => {

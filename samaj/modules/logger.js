@@ -1,16 +1,10 @@
 import winston from "winston";
 
-const customFormat = winston.format.printf(({ timestamp, level, message, stack }) => {
-  const stackInfo = stack ? `\nStack: ${stack}` : ''; 
-  return `${timestamp} [${level.toUpperCase()}]: ${message}${stackInfo}`;
-});
-
 const logger = winston.createLogger({
   level: "debug",
   format: winston.format.combine(
     winston.format.timestamp(),
-    winston.format.errors({ stack: true }), 
-    customFormat 
+    winston.format.json(),
   ),
   transports: [
     new winston.transports.Console(),

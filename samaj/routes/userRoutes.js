@@ -19,20 +19,20 @@ const router = express.Router();
 const userRouter = (db) => {
   logger.info("Setting up user router...");
 
-  router.post("/user/login", loginParse, (req, res) => {
+  router.post("/login", loginParse, (req, res) => {
     login(req, res, db);
   });
 
-  router.post("/user/signup", signupParse, (req, res) => {
+  router.post("/signup", signupParse, (req, res) => {
     signup(req, res, db);
   });
 
-  router.get("/user/details", authorization.authorize, (req, res) => {
+  router.get("/details", authorization.authorize, (req, res) => {
     getUser(req, res, db);
   });
 
   router.post(
-    "/user/action/update",
+    "/action/update",
     authorization.authorize,
     updateUserParse,
     (req, res) => {
@@ -40,12 +40,12 @@ const userRouter = (db) => {
     },
   );
 
-  router.post("/user/action/edit", authorization.authorize, (req, res) => {
+  router.post("/action/edit", authorization.authorize, (req, res) => {
     editUser(req, res, db);
   });
 
   router.post(
-    "/user/action/submit",
+    "/action/submit",
     authorization.authorize,
     submitUserParse,
     (req, res) => {

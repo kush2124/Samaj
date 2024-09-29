@@ -15,16 +15,16 @@ const router = express.Router();
 const adminRouter = (db) => {
   logger.info("Setting up admin router...");
 
-  router.post("/admin/login", loginParse, (req, res) => {
+  router.post("/login", loginParse, (req, res) => {
     adminLogin(req, res, db);
   });
 
-  router.post("/admin/signup", adminSignupParse, (req, res) => {
+  router.post("/signup", adminSignupParse, (req, res) => {
     adminSignup(req, res, db);
   });
 
   router.get(
-    "/admin/search/users/:status",
+    "/search/users/:status",
     authorization.adminAuthorize,
     listUserParse,
     (req, res) => {
@@ -33,7 +33,7 @@ const adminRouter = (db) => {
   );
 
   router.post(
-    "/admin/action/user/:action/:userId",
+    "/action/user/:action/:userId",
     authorization.adminAuthorize,
     actionParse,
     (req, res) => {
