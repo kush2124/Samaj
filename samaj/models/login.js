@@ -1,5 +1,4 @@
 import { z } from "zod";
-import logger from "../modules/logger.js";
 
 const loginSchema = z.object({
   email: z.string().email(),

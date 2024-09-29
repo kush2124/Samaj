@@ -3,8 +3,7 @@ import logger from "./logger.js";
 import { getSecret } from "./awsModule.js";
 
 const connectMongo = async (dbName) => {
-
-  const secret = await getSecret("samaj/db")
+  const secret = await getSecret("samaj/db");
   const connectString = `mongodb+srv://${secret.user}:${secret.pass}@samaj-bglore-9fab71c4.mongo.ondigitalocean.com/${dbName}?tls=true&authSource=admin&replicaSet=samaj-bglore`;
   if (dbName === undefined) {
     throw Error("Database name is required to connect to mongo");

@@ -1,5 +1,4 @@
 import { z } from "zod";
-import logger from "../modules/logger.js";
 import { ADMIN_ACTIONS } from "./adminActions.js";
 
 const actionSchema = z.object({

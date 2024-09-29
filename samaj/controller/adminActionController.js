@@ -11,7 +11,9 @@ export const takeActionOnUser = async (req, res, db) => {
   const action = sanitize(req.params.action);
 
   const actionToStatus = convertActionToStatus(action);
-  logger.info(`takeActionOnUser: Admin ${adminEmail} taking action ${action} on user ${userEmail}`);
+  logger.info(
+    `takeActionOnUser: Admin ${adminEmail} taking action ${action} on user ${userEmail}`,
+  );
   try {
     const userIndb = await User.findOneAndUpdate(
       { email: userEmail },
@@ -20,19 +22,22 @@ export const takeActionOnUser = async (req, res, db) => {
     );
 
     if (!userIndb) {
-      logger.debug(`takeActionOnUser: User was not found for email ${userEmail}`);  
+      logger.debug(
+        `takeActionOnUser: User was not found for email ${userEmail}`,
+      );
       return res.status(400).json({
         msg: "User not found",
       });
     }
 
-    logger.debug(`takeActionOnUser: User was ${actionToStatus} by ${adminEmail}`);
+    logger.debug(
+      `takeActionOnUser: User was ${actionToStatus} by ${adminEmail}`,
+    );
     return res.status(200).json({
       user: userIndb,
       msg: "Operation completed successfully",
     });
   } catch (ex) {
-
     logger.error(ex.message, { exception: ex });
     return res.status(500).json({
       msg: "Internal failure",

@@ -1,5 +1,4 @@
 import { z } from "zod";
-import logger from "../modules/logger.js";
 
 const updateUserSchema = z.object({
   name: z

@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import helmet from "helmet";
 import connectMongo from "./modules/dbConnection.js";
 import userRouter from "./routes/userRoutes.js";
@@ -12,13 +13,14 @@ const PORT = process.env.PORT ?? 3000;
 const mongo = await connectMongo("Samaj");
 
 app.use(helmet());
+app.use(cors());
 app.use(express.json());
 app.use("/user", userRouter(mongo));
 app.use("/admin", adminRouter(mongo));
 app.use((err, res) => {
   logger.error(err);
   return res.status(500).json({
-    msg: "Internal failure"
+    msg: "Internal failure",
   });
 });
 

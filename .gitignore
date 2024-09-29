@@ -1,5 +1,4 @@
 node_modules
 error.log
 .env.keys
-error.log
-debug.log
+*.log

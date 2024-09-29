@@ -21,8 +21,9 @@ export const updateUser = async (req, res, db) => {
       status === USER_STATUS.PENDING ||
       status === USER_STATUS.APPROVED
     ) {
-
-      logger.debug(`updateUser: User not in correct status ${status} to be updated.`);
+      logger.debug(
+        `updateUser: User not in correct status ${status} to be updated.`,
+      );
       return res.status(400).json({
         msg: "User cannot be updated",
       });
@@ -75,8 +76,9 @@ export const submitUser = async (req, res, db) => {
       status === USER_STATUS.PENDING ||
       status === USER_STATUS.APPROVED
     ) {
-
-      logger.debug(`submitUser: User not in correct status ${status} to be updated.`);
+      logger.debug(
+        `submitUser: User not in correct status ${status} to be updated.`,
+      );
       return res.status(400).json({
         msg: "User cannot be submiitted",
       });
@@ -125,7 +127,9 @@ export const editUser = async (req, res, db) => {
         msg: "User not found",
       });
     } else if (status === USER_STATUS.DRAFT) {
-      logger.debug(`editUser: User not in correct status ${status} to be updated.`);
+      logger.debug(
+        `editUser: User not in correct status ${status} to be updated.`,
+      );
       return res.status(400).json({
         msg: "User is already in editable state",
       });

@@ -18,7 +18,7 @@ export const signup = async (req, res, db) => {
     if (userIndb) {
       logger.debug("signup: User found in db");
       return res.status(409).json({
-        email: email, 
+        email: email,
         msg: "User already exists",
       });
     }
@@ -59,7 +59,9 @@ export const adminSignup = async (req, res, db) => {
       code: sanitize(inviteCode),
     });
     if (!inviteCodeInDb || inviteCodeInDb.status === CODE_STATUS.USED) {
-      logger.debug(`adminSignup: Invalid invite code provided by the admin, exiting`);
+      logger.debug(
+        `adminSignup: Invalid invite code provided by the admin, exiting`,
+      );
       return res.status(400).json({
         email: email,
         msg: "Invite code does not exists or already in use",
