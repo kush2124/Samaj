@@ -8,8 +8,6 @@ const loginSchema = z.object({
 
 const loginParse = (req, res, next) => {
   const parsed = loginSchema.safeParse(req.body);
-
-  logger.debug("loginParse: Parsing was successful", parsed);
   if (parsed.success) {
     next();
   } else {

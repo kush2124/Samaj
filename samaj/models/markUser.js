@@ -9,8 +9,6 @@ const actionSchema = z.object({
 
 const actionParse = (req, res, next) => {
   const parsedQuery = actionSchema.safeParse(req.params);
-
-  logger.debug("actionParse: Parsing was successful", parsedQuery);
   if (parsedQuery.success) {
     next();
   } else {

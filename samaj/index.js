@@ -17,7 +17,6 @@ app.use(userRouter(mongo));
 app.use(adminRouter(mongo));
 app.use((err, res) => {
   logger.error(err);
-  res.status(500).send("Internal failure!");
 });
 
 app.listen(PORT, () => {

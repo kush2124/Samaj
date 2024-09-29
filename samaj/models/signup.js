@@ -8,9 +8,6 @@ const signupSchema = z.object({
 
 const signupParse = (req, res, next) => {
   const parsed = signupSchema.safeParse(req.body);
-
-  logger.debug("signupParse: Parsing was successful", parsed);
-
   if (parsed.success) {
     next();
   } else {

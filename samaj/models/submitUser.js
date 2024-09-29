@@ -13,10 +13,8 @@ const saveUserSchema = z.object({
   }),
 });
 
-const saveUserParse = (req, res, next) => {
+const submitUserParse = (req, res, next) => {
   const parsed = saveUserSchema.safeParse(req.body);
-
-  logger.debug("saveUserParse: Parsing was successful", parsed);
   if (parsed.success) {
     next();
   } else {
@@ -26,4 +24,4 @@ const saveUserParse = (req, res, next) => {
   }
 };
 
-export default saveUserParse;
+export default submitUserParse;

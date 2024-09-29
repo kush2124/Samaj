@@ -26,9 +26,10 @@ const authorizer = (req, res, next, SECRET) => {
 
   jwt.verify(token, SECRET, (err, user) => {
     if (err) {
-      return res.status(401).json({
+      res.status(401).json({
         message: "Access denied",
       });
+      return;
     }
     req.user = user;
 

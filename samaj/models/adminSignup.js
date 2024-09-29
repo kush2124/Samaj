@@ -13,7 +13,6 @@ const adminSignupSchema = z.object({
 
 const adminSignupParse = (req, res, next) => {
   const parsed = adminSignupSchema.safeParse(req.body);
-  logger.debug("adminSignupParse: Parsing was successful", parsed);
   if (parsed.success) {
     next();
   } else {

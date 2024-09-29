@@ -9,12 +9,12 @@ const getUser = async (req, res, db) => {
   try {
     const userIndb = await User.findOne({ email: user.email }, "-password");
     if (!userIndb) {
-      logger.debug("get-details: User does not exists, data corrupted");
-      res.status(500).json({
+      logger.debug("getUser: User does not exists, data corrupted");
+      return res.status(500).json({
         msg: "User not found",
       });
     } else {
-      res.status(200).json({
+      return res.status(200).json({
         user: userIndb,
         msg: "User fetched successfully",
       });
@@ -22,7 +22,7 @@ const getUser = async (req, res, db) => {
   } catch (ex) {
     logger.error(ex.message, { exception: ex });
 
-    res.status(500).json({
+    return res.status(500).json({
       msg: "Internal failure",
     });
   }

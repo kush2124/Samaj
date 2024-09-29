@@ -3,6 +3,7 @@ import logger from "../modules/logger.js";
 import sanitize from "mongo-sanitize";
 
 export const searchUsersWithStatus = async (req, res, db) => {
+  logger.info(`searchUsersWithStatus: Search user for request ${req}`);
   try {
     const User = Users(db);
 
@@ -25,14 +26,14 @@ export const searchUsersWithStatus = async (req, res, db) => {
 
     const next = users.length > 0 ? users[users.length - 1]._id : null;
 
-    res.status(200).json({
+    return res.status(200).json({
       users: users,
       resultSize: users.length,
       nextToken: next,
     });
   } catch (ex) {
     logger.error("Internal failure", ex);
-    res.status(500).json({
+    return res.status(500).json({
       msg: "Internal failure",
     });
   }

@@ -11,13 +11,14 @@ export const signup = async (req, res, db) => {
   const User = Users(db);
   const { email, password } = sanitize(req.body);
 
+  logger.info(`signup: User ${email} trying to signup`);
   try {
     const userIndb = await User.findOne({ email: email });
 
     if (userIndb) {
       logger.debug("signup: User found in db");
       return res.status(409).json({
-        email: email,
+        email: email, 
         msg: "User already exists",
       });
     }
@@ -31,14 +32,14 @@ export const signup = async (req, res, db) => {
       status: USER_STATUS.DRAFT,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       email: email,
       msg: "User successfully created",
     });
   } catch (ex) {
     logger.error(ex.message, { exception: ex });
 
-    res.status(500).json({
+    return res.status(500).json({
       email: email,
       msg: "Intrenal failure",
     });
@@ -50,6 +51,7 @@ export const adminSignup = async (req, res, db) => {
   const InviteCode = Invite(db);
   const { email, password, inviteCode, name } = sanitize(req.body);
 
+  logger.info(`adminSignup: Admin ${email} trying to signup`);
   try {
     const adminIndb = await Admin.findOne({ email: email });
 
@@ -57,6 +59,7 @@ export const adminSignup = async (req, res, db) => {
       code: sanitize(inviteCode),
     });
     if (!inviteCodeInDb || inviteCodeInDb.status === CODE_STATUS.USED) {
+      logger.debug(`adminSignup: Invalid invite code provided by the admin, exiting`);
       return res.status(400).json({
         email: email,
         msg: "Invite code does not exists or already in use",
@@ -64,7 +67,7 @@ export const adminSignup = async (req, res, db) => {
     }
 
     if (adminIndb) {
-      logger.debug("signup: Admin found in db");
+      logger.debug("adminSignup: signup: Admin found in db");
       return res.status(409).json({
         email: email,
         msg: "Admin exists in the system",
@@ -85,7 +88,7 @@ export const adminSignup = async (req, res, db) => {
       { $set: { status: CODE_STATUS.USED } },
     );
 
-    res.status(201).json({
+    return res.status(201).json({
       email: email,
       msg: "Admin successfully created",
     });
@@ -94,7 +97,7 @@ export const adminSignup = async (req, res, db) => {
 
     await Admin.deleteOne({ email: email });
 
-    res.status(500).json({
+    return res.status(500).json({
       email: email,
       msg: "Internal failure",
     });

@@ -19,8 +19,6 @@ const updateUserSchema = z.object({
 
 const updateUserParse = (req, res, next) => {
   const parsed = updateUserSchema.safeParse(req.body);
-
-  logger.debug("updateUserParse: Parsing was successful", parsed);
   if (parsed.success) {
     next();
   } else {
