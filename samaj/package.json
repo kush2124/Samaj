@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.658.1",
-    "@dotenvx/dotenvx": "^1.14.2",
+    "@dotenvx/dotenvx": "^1.19.2",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.19.2",
